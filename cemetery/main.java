@@ -1,8 +1,7 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -136,8 +135,6 @@ class My_frame extends JFrame{
         super("Curse project");
         JFrame frame = new JFrame();
         String filepath = "/Users/matvey/IdeaProjects/funeral/Source/IntegralResult.txt";
-        String str_file = "";
-
         //Labels
         JLabel left_corner = new JLabel("Left corner of integral");
         JLabel right_corner = new JLabel("Right corner of integral");
@@ -192,15 +189,6 @@ class My_frame extends JFrame{
                 }
             }
         });
-
-        /*
-        ExpressionParser ep = new ExpressionParser();
-        List<String> expression = ep.parse(func_tfield.getText());
-        boolean flag = ep.flag;
-        if (flag) {
-            calc(expression);
-        }
-        */
 
         frame.add(left_corner);
         frame.add(right_corner);
