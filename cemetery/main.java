@@ -2,6 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.List;
 
@@ -131,12 +135,17 @@ class My_frame extends JFrame{
     My_frame(){
         super("Curse project");
         JFrame frame = new JFrame();
-
+        String filepath = "/Users/matvey/IdeaProjects/funeral/Source/IntegralResult.txt";
+        String str_file = "";
 
         //Labels
         JLabel left_corner = new JLabel("Left corner of integral");
         JLabel right_corner = new JLabel("Right corner of integral");
         JLabel text_integral = new JLabel("Input function: ");
+        JLabel result_midrectpson = new JLabel("");
+        JLabel result_simpson = new JLabel("");
+        result_simpson.setBounds(10,460,300,25);
+        result_midrectpson.setBounds(10,500,300,25);
         text_integral.setBounds(10,40, 200, 25);
         left_corner.setBounds(10,10,200,25);
         right_corner.setBounds(230,10,200,25);
@@ -162,17 +171,25 @@ class My_frame extends JFrame{
                 String str_r = func_str.replaceAll("x", String.valueOf(var_right_corner_integral));
                 String str_s = func_str.replaceAll("x", String.valueOf(var_mid_integral));
                 ExpressionParser ep = new ExpressionParser();
-                List<String> expression_1 = ep.parse(str_l);
-                List<String> expression_2 = ep.parse(str_r);
-                List<String> expression_3 = ep.parse(str_s);
+                List<String> expression_sim_left = ep.parse(str_l);
+                List<String> expression_sim_right = ep.parse(str_r);
+                List<String> expression_sim_middle = ep.parse(str_s);
                 boolean flag = ep.flag;
                 if (flag) {
-                    calc(expression_1);
-                    calc(expression_2);
-                    calc(expression_3);
+                    calc(expression_sim_left);
+                    calc(expression_sim_right);
+                    calc(expression_sim_middle);
                 }
-                JOptionPane.showMessageDialog(null,
-                        ((var_right_corner_integral-var_left_corner_integral)/6)*(calc(expression_1) + 4 * calc(expression_3) + calc(expression_2)));
+                result_simpson.setText("Integral by Simpson method ≈ " + String.valueOf(((var_right_corner_integral-var_left_corner_integral)/6)
+                        *(calc(expression_sim_left) + 4 * calc(expression_sim_middle) + calc(expression_sim_right))) + "\n");
+                result_midrectpson.setText("Integral by Middle Rectangles ≈ " + String.valueOf
+                        (calc(expression_sim_middle)*(var_right_corner_integral-var_left_corner_integral)) + "\n");
+                try {
+                    Files.write(Paths.get(filepath), result_midrectpson.getText().getBytes() , StandardOpenOption.APPEND);
+                    Files.write(Paths.get(filepath), result_simpson.getText().getBytes() , StandardOpenOption.APPEND);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
 
@@ -188,6 +205,8 @@ class My_frame extends JFrame{
         frame.add(left_corner);
         frame.add(right_corner);
         frame.add(text_integral);
+        frame.add(result_simpson);
+        frame.add(result_midrectpson);
         frame.add(left_corner_text);
         frame.add(right_corner_text);
         frame.add(func_tfield);
