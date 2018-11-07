@@ -147,37 +147,43 @@ class My_frame extends JFrame{
         left_corner_text.setBounds(150,10,50,25);
         right_corner_text.setBounds(380, 10, 50,25);
         func_tfield.setBounds(110,40,320,25);
-        left_corner_text.setToolTipText("Input left corner of integral:");
-        right_corner_text.setToolTipText("Input right corner of integral:");
-        //Values of corners of integral
-        left_corner_text.addActionListener(new ActionListener() {
+        //Buttons
+        JButton meth_simpson_middle = new JButton("Method of Middle Simpson Integration");
+        meth_simpson_middle.setBounds(5,70,300,25);
+        //Calculating
+        meth_simpson_middle.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 double var_left_corner_integral = Double.parseDouble(left_corner_text.getText());
-                JOptionPane.showMessageDialog(null, "Left corner is " + var_left_corner_integral);
-            }
-        });
-        right_corner_text.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
                 double var_right_corner_integral = Double.parseDouble(right_corner_text.getText());
-                JOptionPane.showMessageDialog(null, "Right corner is " + var_right_corner_integral);
-            }
-        });
-        func_tfield.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+                double var_mid_integral = (var_left_corner_integral + var_right_corner_integral)/2;
                 String func_str = func_tfield.getText();
-                JOptionPane.showMessageDialog(null,"Your function: " + func_str);
+                String str_l = func_str.replaceAll("x", String.valueOf(var_left_corner_integral));
+                String str_r = func_str.replaceAll("x", String.valueOf(var_right_corner_integral));
+                String str_s = func_str.replaceAll("x", String.valueOf(var_mid_integral));
+                ExpressionParser ep = new ExpressionParser();
+                List<String> expression_1 = ep.parse(str_l);
+                List<String> expression_2 = ep.parse(str_r);
+                List<String> expression_3 = ep.parse(str_s);
+                boolean flag = ep.flag;
+                if (flag) {
+                    calc(expression_1);
+                    calc(expression_2);
+                    calc(expression_3);
+                }
+                JOptionPane.showMessageDialog(null,
+                        ((var_right_corner_integral-var_left_corner_integral)/6)*(calc(expression_1) + 4 * calc(expression_3) + calc(expression_2)));
             }
         });
 
+        /*
         ExpressionParser ep = new ExpressionParser();
         List<String> expression = ep.parse(func_tfield.getText());
         boolean flag = ep.flag;
         if (flag) {
             calc(expression);
         }
+        */
 
         frame.add(left_corner);
         frame.add(right_corner);
@@ -185,6 +191,7 @@ class My_frame extends JFrame{
         frame.add(left_corner_text);
         frame.add(right_corner_text);
         frame.add(func_tfield);
+        frame.add(meth_simpson_middle);
         frame.setSize(600, 600);
         frame.setLayout(null);
         frame.setVisible(true);
