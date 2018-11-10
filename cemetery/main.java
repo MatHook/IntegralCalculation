@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -106,7 +107,7 @@ class ExpressionParser {
 }
 
 class My_frame extends JFrame{
-    public static Double calc(List<String> postfix) {
+    private static Double calc(List<String> postfix) {
 
         Deque<Double> stack = new ArrayDeque<Double>();
         for (String x : postfix) {
@@ -131,7 +132,19 @@ class My_frame extends JFrame{
         }
         return stack.pop();
     }
-    My_frame(){
+    private void read() throws IOException{
+        FileReader fileReader = new FileReader("Source/IntegralResult.txt");
+        Scanner sc = new Scanner(fileReader);
+        int i = 1;
+
+        while(sc.hasNextLine()) {
+            sc.nextLine();
+            JOptionPane.showMessageDialog(null, sc);
+            i++;
+        }
+        fileReader.close();
+    }
+    private My_frame(){
         super("Curse project");
         JFrame frame = new JFrame();
         String filepath = "/Users/matvey/IdeaProjects/funeral/Source/IntegralResult.txt";
@@ -141,8 +154,8 @@ class My_frame extends JFrame{
         JLabel text_integral = new JLabel("Input function: ");
         JLabel result_midrectpson = new JLabel("");
         JLabel result_simpson = new JLabel("");
-        result_simpson.setBounds(10,460,300,25);
-        result_midrectpson.setBounds(10,500,300,25);
+        result_simpson.setBounds(10,460,400,25);
+        result_midrectpson.setBounds(10,500,400,25);
         text_integral.setBounds(10,40, 200, 25);
         left_corner.setBounds(10,10,200,25);
         right_corner.setBounds(230,10,200,25);
@@ -154,10 +167,12 @@ class My_frame extends JFrame{
         right_corner_text.setBounds(380, 10, 50,25);
         func_tfield.setBounds(110,40,320,25);
         //Buttons
-        JButton meth_simpson_middle = new JButton("Method of Middle Simpson Integration");
-        meth_simpson_middle.setBounds(5,70,300,25);
+        JButton button_calc = new JButton("Integrate");
+        button_calc.setBounds(5,70,300,25);
+        JButton show_results = new JButton("Show past results");
+        show_results.setBounds(450,500,150,25);
         //Calculating
-        meth_simpson_middle.addActionListener(new ActionListener() {
+        button_calc.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 double var_left_corner_integral = Double.parseDouble(left_corner_text.getText());
@@ -190,6 +205,17 @@ class My_frame extends JFrame{
             }
         });
 
+        show_results.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    read();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+
         frame.add(left_corner);
         frame.add(right_corner);
         frame.add(text_integral);
@@ -198,7 +224,8 @@ class My_frame extends JFrame{
         frame.add(left_corner_text);
         frame.add(right_corner_text);
         frame.add(func_tfield);
-        frame.add(meth_simpson_middle);
+        frame.add(button_calc);
+        frame.add(show_results);
         frame.setSize(600, 600);
         frame.setLayout(null);
         frame.setVisible(true);
