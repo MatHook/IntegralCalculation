@@ -111,35 +111,52 @@ class My_frame extends JFrame{
 
         Deque<Double> stack = new ArrayDeque<Double>();
         for (String x : postfix) {
-            if (x.equals("sqrt")) stack.push(Math.sqrt(stack.pop()));
-            else if (x.equals("cube")) {
-                Double tmp = stack.pop();
-                stack.push(tmp * tmp * tmp);
+            switch (x) {
+                case "sqrt":
+                    stack.push(Math.sqrt(stack.pop()));
+                    break;
+                case "cube":
+                    Double tmp = stack.pop();
+                    stack.push(tmp * tmp * tmp);
+                    break;
+                case "pow10":
+                    stack.push(Math.pow(10, stack.pop()));
+                    break;
+                case "+":
+                    stack.push(stack.pop() + stack.pop());
+                    break;
+                case "-": {
+                    Double b = stack.pop(), a = stack.pop();
+                    stack.push(a - b);
+                    break;
+                }
+                case "*":
+                    stack.push(stack.pop() * stack.pop());
+                    break;
+                case "/": {
+                    Double b = stack.pop(), a = stack.pop();
+                    stack.push(a / b);
+                    break;
+                }
+                case "u-":
+                    stack.push(-stack.pop());
+                    break;
+                default:
+                    stack.push(Double.valueOf(x));
+                    break;
             }
-            else if (x.equals("pow10")) stack.push(Math.pow(10, stack.pop()));
-            else if (x.equals("+")) stack.push(stack.pop() + stack.pop());
-            else if (x.equals("-")) {
-                Double b = stack.pop(), a = stack.pop();
-                stack.push(a - b);
-            }
-            else if (x.equals("*")) stack.push(stack.pop() * stack.pop());
-            else if (x.equals("/")) {
-                Double b = stack.pop(), a = stack.pop();
-                stack.push(a / b);
-            }
-            else if (x.equals("u-")) stack.push(-stack.pop());
-            else stack.push(Double.valueOf(x));
         }
         return stack.pop();
     }
     private void read() throws IOException{
         FileReader fileReader = new FileReader("Source/IntegralResult.txt");
         Scanner sc = new Scanner(fileReader);
+        String line;
         int i = 1;
 
         while(sc.hasNextLine()) {
-            sc.nextLine();
-            JOptionPane.showMessageDialog(null, sc);
+            line = sc.nextLine();
+            JOptionPane.showMessageDialog(null, line);
             i++;
         }
         fileReader.close();
@@ -192,9 +209,9 @@ class My_frame extends JFrame{
                     calc(expression_sim_right);
                     calc(expression_sim_middle);
                 }
-                result_simpson.setText("Integral by Simpson method ≈ " + String.valueOf(((var_right_corner_integral-var_left_corner_integral)/6)
+                result_simpson.setText("∫" + func_tfield.getText() + " result by Simpson method ≈ " + String.valueOf(((var_right_corner_integral-var_left_corner_integral)/6)
                         *(calc(expression_sim_left) + 4 * calc(expression_sim_middle) + calc(expression_sim_right))) + "\n");
-                result_midrectpson.setText("Integral by Middle Rectangles ≈ " + String.valueOf
+                result_midrectpson.setText("∫" + func_tfield.getText() + " result by Middle Rectangles ≈ " + String.valueOf
                         (calc(expression_sim_middle)*(var_right_corner_integral-var_left_corner_integral)) + "\n");
                 try {
                     Files.write(Paths.get(filepath), result_midrectpson.getText().getBytes() , StandardOpenOption.APPEND);

@@ -1,2 +1,2 @@
-Integral by Middle Rectangles ≈ 6.0
-Integral by Simpson method ≈ 6.0
+∫x result by Middle Rectangles ≈ 2.0
+∫x result by Simpson method ≈ 2.0
