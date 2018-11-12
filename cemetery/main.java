@@ -171,8 +171,8 @@ class My_frame extends JFrame{
         JLabel text_integral = new JLabel("Input function: ");
         JLabel result_midrectpson = new JLabel("");
         JLabel result_simpson = new JLabel("");
-        result_simpson.setBounds(10,460,400,25);
-        result_midrectpson.setBounds(10,500,400,25);
+        result_simpson.setBounds(10,100,600,25);
+        result_midrectpson.setBounds(10,150,600,25);
         text_integral.setBounds(10,40, 200, 25);
         left_corner.setBounds(10,10,200,25);
         right_corner.setBounds(230,10,200,25);
@@ -210,9 +210,11 @@ class My_frame extends JFrame{
                     calc(expression_sim_middle);
                 }
                 result_simpson.setText("∫" + func_tfield.getText() + " result by Simpson method ≈ " + String.valueOf(((var_right_corner_integral-var_left_corner_integral)/6)
-                        *(calc(expression_sim_left) + 4 * calc(expression_sim_middle) + calc(expression_sim_right))) + "\n");
+                        *(calc(expression_sim_left) + 4 * calc(expression_sim_middle) + calc(expression_sim_right)))
+                        + ". Left corner: " + var_left_corner_integral + " and right corner: " + var_right_corner_integral + "\n");
                 result_midrectpson.setText("∫" + func_tfield.getText() + " result by Middle Rectangles ≈ " + String.valueOf
-                        (calc(expression_sim_middle)*(var_right_corner_integral-var_left_corner_integral)) + "\n");
+                        (calc(expression_sim_middle)*(var_right_corner_integral-var_left_corner_integral))
+                        + ". Left corner: " + var_left_corner_integral + " and right corner: " + var_right_corner_integral + "\n");
                 try {
                     Files.write(Paths.get(filepath), result_midrectpson.getText().getBytes() , StandardOpenOption.APPEND);
                     Files.write(Paths.get(filepath), result_simpson.getText().getBytes() , StandardOpenOption.APPEND);
