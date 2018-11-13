@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="funeral:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/funeral_jar</output-path>
+    <root id="archive" name="funeral.jar">
+      <element id="module-output" name="funeral" />
+    </root>
+  </artifact>
+</component>

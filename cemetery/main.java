@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -149,7 +148,7 @@ class My_frame extends JFrame{
         return stack.pop();
     }
     private void read() throws IOException{
-        FileReader fileReader = new FileReader("Source/IntegralResult.txt");
+        FileReader fileReader = new FileReader("IntegralResult.txt");
         Scanner sc = new Scanner(fileReader);
         String line;
         int i = 1;
