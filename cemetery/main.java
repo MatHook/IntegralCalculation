@@ -8,10 +8,10 @@ import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.List;
 
-class ExpressionParser {
+class ExpressionParser /* Parser by postfix */{
     private static String operators = "+-*/";
     private static String delimiters = "() " + operators;
-    public static boolean flag = true;
+    static boolean flag = true;
     private static boolean isDelimiter(String token) {
         if (token.length() != 1) return false;
         for (int i = 0; i < delimiters.length(); i++) {
@@ -19,7 +19,6 @@ class ExpressionParser {
         }
         return false;
     }
-
     private static boolean isOperator(String token) {
         if (token.equals("u-")) return true;
         for (int i = 0; i < operators.length(); i++) {
@@ -27,20 +26,16 @@ class ExpressionParser {
         }
         return false;
     }
-
     private static boolean isFunction(String token) {
-        if (token.equals("sqrt") || token.equals("cube") || token.equals("pow10")) return true;
-        return false;
+        return token.equals("sqrt") || token.equals("cube") || token.equals("pow10");
     }
-
     private static int priority(String token) {
         if (token.equals("(")) return 1;
         if (token.equals("+") || token.equals("-")) return 2;
         if (token.equals("*") || token.equals("/")) return 3;
         return 4;
     }
-
-    public static List<String> parse(String infix) {
+    static List<String> parse(String infix) {
         List<String> postfix = new ArrayList<String>();
         Deque<String> stack = new ArrayDeque<String>();
         StringTokenizer tokenizer = new StringTokenizer(infix, delimiters, true);
@@ -49,7 +44,7 @@ class ExpressionParser {
         while (tokenizer.hasMoreTokens()) {
             curr = tokenizer.nextToken();
             if (!tokenizer.hasMoreTokens() && isOperator(curr)) {
-                System.out.println("Некорректное выражение.");
+                System.out.println("Incorrect function.");
                 flag = false;
                 return postfix;
             }
@@ -61,7 +56,7 @@ class ExpressionParser {
                     while (!stack.peek().equals("(")) {
                         postfix.add(stack.pop());
                         if (stack.isEmpty()) {
-                            System.out.println("Скобки не согласованы.");
+                            System.out.println("Incorrect '(' and ')'");
                             flag = false;
                             return postfix;
                         }
@@ -73,7 +68,7 @@ class ExpressionParser {
                 }
                 else {
                     if (curr.equals("-") && (prev.equals("") || (isDelimiter(prev)  && !prev.equals(")")))) {
-                        // унарный минус
+                        // Unar minus
                         curr = "u-";
                     }
                     else {
@@ -96,7 +91,7 @@ class ExpressionParser {
         while (!stack.isEmpty()) {
             if (isOperator(stack.peek())) postfix.add(stack.pop());
             else {
-                System.out.println("Скобки не согласованы.");
+                System.out.println("Incorrect '(' and ')'");
                 flag = false;
                 return postfix;
             }
@@ -106,8 +101,7 @@ class ExpressionParser {
 }
 
 class My_frame extends JFrame{
-    private static Double calc(List<String> postfix) {
-
+    private static Double calc(List<String> postfix) /*PostFix method to calculate in string */ {
         Deque<Double> stack = new ArrayDeque<Double>();
         for (String x : postfix) {
             switch (x) {
@@ -147,7 +141,7 @@ class My_frame extends JFrame{
         }
         return stack.pop();
     }
-    private void read() throws IOException{
+    private void read() throws IOException /* Read textfile method */{
         FileReader fileReader = new FileReader("IntegralResult.txt");
         Scanner sc = new Scanner(fileReader);
         String line;
@@ -160,12 +154,12 @@ class My_frame extends JFrame{
         }
         fileReader.close();
     }
-    private My_frame(){
+    private My_frame() /* Main GUI */{
         super("Curse project");
         JFrame frame = new JFrame();
         String filepath = "/Users/matvey/IdeaProjects/funeral/Source/IntegralResult.txt";
-        //Labels
-        JLabel left_corner = new JLabel("Left corner of integral");
+
+        JLabel left_corner = new JLabel("Left corner of integral"); //Labels
         JLabel right_corner = new JLabel("Right corner of integral");
         JLabel text_integral = new JLabel("Input function: ");
         JLabel result_midrectpson = new JLabel("");
@@ -175,20 +169,20 @@ class My_frame extends JFrame{
         text_integral.setBounds(10,40, 200, 25);
         left_corner.setBounds(10,10,200,25);
         right_corner.setBounds(230,10,200,25);
-        //TextAreas
-        JTextField left_corner_text = new JTextField(10);
+
+        JTextField left_corner_text = new JTextField(10); //TextAreas
         JTextField right_corner_text = new JTextField(10);
         JTextField func_tfield = new JTextField(25);
         left_corner_text.setBounds(150,10,50,25);
         right_corner_text.setBounds(380, 10, 50,25);
         func_tfield.setBounds(110,40,320,25);
-        //Buttons
-        JButton button_calc = new JButton("Integrate");
+
+        JButton button_calc = new JButton("Integrate"); //Buttons
         button_calc.setBounds(5,70,300,25);
         JButton show_results = new JButton("Show past results");
         show_results.setBounds(450,500,150,25);
-        //Calculating
-        button_calc.addActionListener(new ActionListener() {
+
+        button_calc.addActionListener(new ActionListener() { //Calculating
             @Override
             public void actionPerformed(ActionEvent e) {
                 double var_left_corner_integral = Double.parseDouble(left_corner_text.getText());
@@ -203,6 +197,7 @@ class My_frame extends JFrame{
                 List<String> expression_sim_right = ep.parse(str_r);
                 List<String> expression_sim_middle = ep.parse(str_s);
                 boolean flag = ep.flag;
+
                 if (flag) {
                     calc(expression_sim_left);
                     calc(expression_sim_right);
@@ -223,7 +218,7 @@ class My_frame extends JFrame{
             }
         });
 
-        show_results.addActionListener(new ActionListener() {
+        show_results.addActionListener(new ActionListener() { //Showing result in MessageDialog from text file
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
