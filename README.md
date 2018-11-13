@@ -8,3 +8,5 @@ Added methods to calculate integrals by 2 methods:
 -Simpson's rule
 -Midpoint rule
 Added writing results integration to end of file
+<h3>13.11</h3>
+Final version added. Created application for Mac Os X. 
