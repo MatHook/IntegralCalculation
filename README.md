@@ -10,3 +10,5 @@ Added methods to calculate integrals by 2 methods:
 Added writing results integration to end of file
 <h3>13.11</h3>
 Final version added. Created application for Mac Os X. 
+<h3>15.11</h3>
+Fixed path for writing and reading methods. Rebuilded artifact and application. Added new .icns in app. 
