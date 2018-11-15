@@ -142,8 +142,7 @@ class My_frame extends JFrame{
         return stack.pop();
     }
     private void read() throws IOException /* Read textfile method */{
-        FileReader fileReader = new FileReader("IntegralResult.txt");
-        Scanner sc = new Scanner(fileReader);
+        Scanner sc = new Scanner(new File(System.getProperty("user.home") + "/IntegralResult.txt"));
         String line;
         int i = 1;
 
@@ -152,12 +151,11 @@ class My_frame extends JFrame{
             JOptionPane.showMessageDialog(null, line);
             i++;
         }
-        fileReader.close();
     }
     private My_frame() /* Main GUI */{
         super("Curse project");
         JFrame frame = new JFrame();
-        String filepath = "/Users/matvey/IdeaProjects/funeral/Source/IntegralResult.txt";
+        String filepath = System.getProperty("user.home") + "/IntegralResult.txt";
 
         JLabel left_corner = new JLabel("Left corner of integral"); //Labels
         JLabel right_corner = new JLabel("Right corner of integral");
@@ -210,9 +208,10 @@ class My_frame extends JFrame{
                         (calc(expression_sim_middle)*(var_right_corner_integral-var_left_corner_integral))
                         + ". Left corner: " + var_left_corner_integral + " and right corner: " + var_right_corner_integral + "\n");
                 try {
-                    Files.write(Paths.get(filepath), result_midrectpson.getText().getBytes() , StandardOpenOption.APPEND);
-                    Files.write(Paths.get(filepath), result_simpson.getText().getBytes() , StandardOpenOption.APPEND);
+                    Files.write(Paths.get(filepath), result_midrectpson.getText().getBytes(), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+                    Files.write(Paths.get(filepath), result_simpson.getText().getBytes(), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
                 } catch (IOException e1) {
+                    JOptionPane.showMessageDialog(null,"Can't write info");
                     e1.printStackTrace();
                 }
             }
@@ -225,6 +224,7 @@ class My_frame extends JFrame{
                     read();
                 } catch (IOException e1) {
                     e1.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "File not found");
                 }
             }
         });
