@@ -12,3 +12,5 @@ Added writing results integration to end of file
 Final version added. Created application for Mac Os X. 
 <h3>15.11</h3>
 Fixed path for writing and reading methods. Rebuilded artifact and application. Added new .icns in app. 
+<h3>16.11</h3> 
+Added Nyuton-Kotes method for 5 degree. 
