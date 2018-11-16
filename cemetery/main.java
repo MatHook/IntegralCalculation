@@ -155,6 +155,7 @@ class My_frame extends JFrame{
     private My_frame() /* Main GUI */{
         super("Curse project");
         JFrame frame = new JFrame();
+        Random rnd = new Random();
         String filepath = System.getProperty("user.home") + "/IntegralResult.txt";
 
         JLabel left_corner = new JLabel("Left corner of integral"); //Labels
@@ -162,8 +163,10 @@ class My_frame extends JFrame{
         JLabel text_integral = new JLabel("Input function: ");
         JLabel result_midrectpson = new JLabel("");
         JLabel result_simpson = new JLabel("");
+        JLabel result_newkotes = new JLabel("");
         result_simpson.setBounds(10,100,600,25);
         result_midrectpson.setBounds(10,150,600,25);
+        result_newkotes.setBounds(10, 200, 600,25);
         text_integral.setBounds(10,40, 200, 25);
         left_corner.setBounds(10,10,200,25);
         right_corner.setBounds(230,10,200,25);
@@ -186,20 +189,31 @@ class My_frame extends JFrame{
                 double var_left_corner_integral = Double.parseDouble(left_corner_text.getText());
                 double var_right_corner_integral = Double.parseDouble(right_corner_text.getText());
                 double var_mid_integral = (var_left_corner_integral + var_right_corner_integral)/2;
+                double var_rand_integral = var_left_corner_integral + rnd.nextDouble()*(var_right_corner_integral - var_left_corner_integral);
+                double c_0 = 5.0 / 288.0;
+                double var_h_nkotes = (var_right_corner_integral-var_left_corner_integral)/ 5.0;
+                double[] var_wits = new double[] {19.0, 75.0, 50.0, 50.0, 75.0, 19.0};
+                double var_sum_nkotes = 0.0;
                 String func_str = func_tfield.getText();
                 String str_l = func_str.replaceAll("x", String.valueOf(var_left_corner_integral));
                 String str_r = func_str.replaceAll("x", String.valueOf(var_right_corner_integral));
                 String str_s = func_str.replaceAll("x", String.valueOf(var_mid_integral));
+                String str_rand = func_str.replaceAll("x", String.valueOf(var_rand_integral));
                 ExpressionParser ep = new ExpressionParser();
                 List<String> expression_sim_left = ep.parse(str_l);
                 List<String> expression_sim_right = ep.parse(str_r);
                 List<String> expression_sim_middle = ep.parse(str_s);
+                List<String> expression_nktotes = ep.parse(str_rand);
                 boolean flag = ep.flag;
 
                 if (flag) {
                     calc(expression_sim_left);
                     calc(expression_sim_right);
                     calc(expression_sim_middle);
+                    calc(expression_nktotes);
+                }
+                for(int i = 0; i < 4; i++) {
+                    var_sum_nkotes += var_wits[i]*calc(expression_nktotes);
                 }
                 result_simpson.setText("∫" + func_tfield.getText() + " result by Simpson method ≈ " + String.valueOf(((var_right_corner_integral-var_left_corner_integral)/6)
                         *(calc(expression_sim_left) + 4 * calc(expression_sim_middle) + calc(expression_sim_right)))
@@ -207,9 +221,13 @@ class My_frame extends JFrame{
                 result_midrectpson.setText("∫" + func_tfield.getText() + " result by Middle Rectangles ≈ " + String.valueOf
                         (calc(expression_sim_middle)*(var_right_corner_integral-var_left_corner_integral))
                         + ". Left corner: " + var_left_corner_integral + " and right corner: " + var_right_corner_integral + "\n");
+                result_newkotes.setText("∫" + func_tfield.getText() + " result by Nyuton-Kotes for 5 degree method ≈ "
+                        + String.valueOf(c_0*var_h_nkotes*var_sum_nkotes)
+                        + ". Left corner: " + var_left_corner_integral + " and right corner: " + var_right_corner_integral + "\n");
                 try {
                     Files.write(Paths.get(filepath), result_midrectpson.getText().getBytes(), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
                     Files.write(Paths.get(filepath), result_simpson.getText().getBytes(), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+                    Files.write(Paths.get(filepath), result_newkotes.getText().getBytes(), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
                 } catch (IOException e1) {
                     JOptionPane.showMessageDialog(null,"Can't write info");
                     e1.printStackTrace();
@@ -234,6 +252,7 @@ class My_frame extends JFrame{
         frame.add(text_integral);
         frame.add(result_simpson);
         frame.add(result_midrectpson);
+        frame.add(result_newkotes);
         frame.add(left_corner_text);
         frame.add(right_corner_text);
         frame.add(func_tfield);
