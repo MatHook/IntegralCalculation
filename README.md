@@ -14,4 +14,5 @@ Final version added. Created application for Mac Os X.
 Fixed path for writing and reading methods. Rebuilded artifact and application. Added new .icns in app. 
 <h3>16.11</h3> 
 Added Nyuton-Kotes method for 5 degree. 
+
 ![Working programm](https://github.com/iNaHook/IntegralCalculation/blob/master/cemetery/screenshotpng.png)
